@@ -72,7 +72,15 @@ class Keyboard(object):
 
     shift_code =    win32con.VK_SHIFT
     ctrl_code =     win32con.VK_CONTROL
-    alt_code =      win32con.VK_MENU
+    alt_code =      win32con.VK_LMENU
+    #alt_code =      164
+    
+    # Neo2 Modifier
+    mod2_code = win32con.VK_SHIFT
+    mod3_code = 226
+    # mod3_code = win32con.VK_CAPITAL
+    mod4_code = 223
+    # mod4_code = win32con.VK_OEM_8
 
     @classmethod
     def send_keyboard_events(cls, events):
@@ -105,6 +113,8 @@ class Keyboard(object):
 
     @classmethod
     def xget_virtual_keycode(cls, char):
+        print "Warning! Using function that is not covered by NEO2 modifications!"
+        
         if isinstance(char, str):
             code = windll.user32.VkKeyScanA(c_char(char))
         else:
@@ -136,9 +146,117 @@ class Keyboard(object):
         code &= 0x00ff
         return code, modifiers
 
+    # Static Neo2 Typeables
+    @classmethod
+    def get_neo2_typeable(cls, char):
+        return {
+            ' ': (32, []),
+            'a': (65, []),
+            'b': (66, []),
+            'c': (67, []),
+            'd': (68, []),
+            'e': (69, []),
+            'f': (70, []),
+            'g': (71, []),
+            'h': (72, []),
+            'i': (73, []),
+            'j': (74, []),
+            'k': (75, []),
+            'l': (76, []),
+            'm': (77, []),
+            'n': (78, []),
+            'o': (79, []),
+            'p': (80, []),
+            'q': (81, []),
+            'r': (82, []),
+            's': (83, []),
+            't': (84, []),
+            'u': (85, []),
+            'v': (86, []),
+            'w': (87, []),
+            'x': (88, []),
+            'y': (89, []),
+            'z': (90, []),
+            'A': (321, [cls.mod2_code]),
+            'B': (322, [cls.mod2_code]),
+            'C': (323, [cls.mod2_code]),
+            'D': (324, [cls.mod2_code]),
+            'E': (325, [cls.mod2_code]),
+            'F': (326, [cls.mod2_code]),
+            'G': (327, [cls.mod2_code]),
+            'H': (328, [cls.mod2_code]),
+            'I': (329, [cls.mod2_code]),
+            'J': (330, [cls.mod2_code]),
+            'K': (331, [cls.mod2_code]),
+            'L': (332, [cls.mod2_code]),
+            'M': (333, [cls.mod2_code]),
+            'N': (334, [cls.mod2_code]),
+            'O': (335, [cls.mod2_code]),
+            'P': (336, [cls.mod2_code]),
+            'Q': (337, [cls.mod2_code]),
+            'R': (338, [cls.mod2_code]),
+            'S': (339, [cls.mod2_code]),
+            'T': (340, [cls.mod2_code]),
+            'U': (341, [cls.mod2_code]),
+            'V': (342, [cls.mod2_code]),
+            'W': (343, [cls.mod2_code]),
+            'X': (344, [cls.mod2_code]),
+            'Y': (345, [cls.mod2_code]),
+            'Z': (346, [cls.mod2_code]),
+            '0': (48, []),
+            '1': (49, []),
+            '2': (2236, [cls.mod4_code]),
+            '3': (51, []),
+            '4': (52, []),
+            '5': (53, []),
+            '6': (2132, [cls.mod4_code]),
+            '7': (55, []),
+            '8': (56, []),
+            '9': (57, []),
+            '!': (4171, [cls.mod3_code]),
+            '@': (4185, [cls.mod3_code]),
+            '#': (4316, [cls.mod3_code]),
+            '$': (4317, [cls.mod3_code]),
+            '%': (4173, [cls.mod3_code]),
+            '^': (186, [cls.mod3_code]),
+            '&': (4177, [cls.mod3_code]),
+            '*': (2096, [cls.mod4_code]),
+            '(': (4174, [cls.mod3_code]),
+            ')': (4178, [cls.mod3_code]),
+            '-': (189, [cls.mod4_code]),
+            '_': (4182, [cls.mod3_code]),
+            '+': (2129, [cls.mod4_code]),
+            '`': (191, [cls.mod3_code]),
+            '~': (4176, [cls.mod3_code]),
+            '[': (4172, [cls.mod3_code]),
+            ']': (4163, [cls.mod3_code]),
+            '{': (4161, [cls.mod3_code]),
+            '}': (4165, [cls.mod3_code]),
+            '\\': (4181, [cls.mod3_code]),
+            '|': (4318, [cls.mod3_code]),
+            ':': (4164, [cls.mod3_code]),
+            ';': (4170, [cls.mod3_code]),
+            '\'': (4286, [cls.mod3_code]),
+            '"': (4284, [cls.mod3_code]),
+            ',': (2116, [cls.mod4_code]),
+            #            '.': (6330, [cls.mod4_code]),
+            '.': (190, []),
+            '/': (2105, [cls.mod4_code]),
+            '<': (4168, [cls.mod3_code]),
+            '>': (4167, [cls.mod3_code]),
+            '?': (4179, [cls.mod3_code]),
+            '=': (4166, [cls.mod3_code])
+        }.get(char, (-1, -1))
+
     @classmethod
     def get_typeable(cls, char):
-        code, modifiers = cls.get_keycode_and_modifiers(char)
+        # Call cls.get_neo2_typeable(char) to get static NEO2 Typeables
+        code, modifiers = cls.get_neo2_typeable(char)
+
+        if code == -1 and modifiers == -1:
+            code, modifiers = cls.get_keycode_and_modifiers(char)
+        else:
+            code &= 0x00ff
         return Typeable(code, modifiers)
 
 

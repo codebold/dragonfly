@@ -42,17 +42,18 @@ class KeyboardInput(Structure):
     #  http://www.xtremevbtalk.com/archive/index.php/t-203863.html
     #  http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winui/winui/windowsuserinterface/userinput/keyboardinput/aboutkeyboardinput.asp
     extended_keys = (
-                     win32con.VK_UP,
-                     win32con.VK_DOWN,
-                     win32con.VK_LEFT,
-                     win32con.VK_RIGHT,
-                     win32con.VK_HOME,
-                     win32con.VK_END,
-                     win32con.VK_PRIOR,
-                     win32con.VK_NEXT,
-                     win32con.VK_INSERT,
-                     win32con.VK_LWIN,
-                    )
+        win32con.VK_UP,
+        win32con.VK_DOWN,
+        win32con.VK_LEFT,
+        win32con.VK_RIGHT,
+        win32con.VK_HOME,
+        win32con.VK_END,
+        win32con.VK_PRIOR,
+        win32con.VK_NEXT,
+        win32con.VK_INSERT,
+        win32con.VK_LWIN,
+        win32con.VK_DELETE
+    )
 
     def __init__(self, virtual_keycode, down):
         scancode = windll.user32.MapVirtualKeyA(virtual_keycode, 0)
